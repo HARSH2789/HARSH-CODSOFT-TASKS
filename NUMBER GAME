@@ -1,0 +1,74 @@
+import java.util.Scanner;
+import java.util.Random;
+
+public class GuessingGame {
+
+    public static void main(String[] args) {
+        // Create Scanner to take user input and Random to generate random numbers
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        // Initialize variables to track rounds and score
+        int totalRounds = 0;
+        int totalScore = 0;
+        boolean playAgain = true;
+
+        // Welcome message
+        System.out.println("Welcome to the Number Guessing Game!");
+
+        // Main game loop (for multiple rounds)
+        while (playAgain) {
+            totalRounds++;  // Keep track of the round number
+
+            // Generate a random number between 1 and 100
+            int numberToGuess = random.nextInt(100) + 1;
+            int maxAttempts = 5;  // Maximum number of guesses allowed
+            int attempts = 0;     // Initialize attempt counter
+            boolean guessedCorrectly = false;
+
+            // Let the user know the round has started
+            System.out.println("\nRound " + totalRounds + ": I'm thinking of a number between 1 and 100.");
+            System.out.println("You have " + maxAttempts + " attempts to guess it. Good luck!");
+
+            // Inner loop for each round (for attempts)
+            while (attempts < maxAttempts && !guessedCorrectly) {
+                attempts++;  // Increment the number of attempts
+
+                // Prompt user for their guess
+                System.out.print("Attempt " + attempts + ": Enter your guess: ");
+                int userGuess = scanner.nextInt();
+
+                // Compare user's guess to the generated number
+                if (userGuess == numberToGuess) {
+                    System.out.println("Congratulations! You guessed the correct number.");
+                    guessedCorrectly = true;
+                    // Increase score based on remaining attempts (fewer attempts = higher score)
+                    totalScore += (maxAttempts - attempts + 1);
+                } else if (userGuess > numberToGuess) {
+                    System.out.println("Too high! Try again.");
+                } else {
+                    System.out.println("Too low! Try again.");
+                }
+            }
+
+            // If user didn't guess correctly within the attempts, reveal the number
+            if (!guessedCorrectly) {
+                System.out.println("Sorry! You've used all your attempts. The correct number was: " + numberToGuess);
+            }
+
+            // Ask if the user wants to play another round
+            System.out.print("Do you want to play another round? (yes/no): ");
+            String userResponse = scanner.next();
+
+            // If user types anything other than "yes", end the game
+            playAgain = userResponse.equalsIgnoreCase("yes");
+        }
+
+        // After all rounds are finished, display the final results
+        System.out.println("\nGame Over! You played " + totalRounds + " rounds.");
+        System.out.println("Your total score is: " + totalScore);
+
+        // Close the scanner (good practice to avoid resource leaks)
+        scanner.close();
+    }
+}
